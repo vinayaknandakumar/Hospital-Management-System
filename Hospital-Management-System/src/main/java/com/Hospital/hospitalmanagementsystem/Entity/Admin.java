@@ -19,7 +19,7 @@ public class Admin {
     private String lastName;
     private String email;
 
-    @Column(name = "password_hashed")
+    //@Column(name = "password_hashed")
     private String password;
 }
 

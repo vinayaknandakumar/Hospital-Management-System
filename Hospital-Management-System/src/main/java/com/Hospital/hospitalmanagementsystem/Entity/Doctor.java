@@ -20,5 +20,6 @@ public class Doctor {
     private String gender;
     private String specialization;
     private boolean doctorPresent;
+    private String password;
 }
 
