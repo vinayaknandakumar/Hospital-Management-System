@@ -25,6 +25,11 @@ public class RegisterService {
     @Autowired
     private ReceptionistRepository receptionistRepository;
 
+    /**
+     * to validate firstName
+     * @param firstName
+     * @return true
+     */
     private int validateFirstName(String firstName){
         if(firstName==null || firstName.trim().isEmpty()){
             throw new IllegalArgumentException("First Name can't be empty");
@@ -34,6 +39,11 @@ public class RegisterService {
         }
     }
 
+    /**
+     * to validate lastname
+     * @param lastName
+     * @return true
+     */
     private int validateLastName(String lastName){
         if(lastName==null||lastName.trim().isEmpty()){
             throw new IllegalArgumentException("Last name can't be empty");
@@ -43,6 +53,12 @@ public class RegisterService {
         }
     }
 
+    /**
+     * to validate email for null and @ and unique email
+     * @param email
+     * @param role
+     * @return true
+     */
     private int validateEmail(String email,String role){
         if(email==null || email.trim().isEmpty()){
             throw new IllegalArgumentException("Email can't be empty");
@@ -61,6 +77,11 @@ public class RegisterService {
         }
     }
 
+    /**
+     * to validate password not <3 and >8
+     * @param password
+     * @return true
+     */
     private int validatePassword(String password){
         if(password.length()<4 || password.length()>8){
             throw new IllegalArgumentException("Password must contain more than 3 characters and less than 8 characters");
@@ -70,6 +91,12 @@ public class RegisterService {
         }
     }
 
+    /**
+     * to validate phone for 10 digits and uniqye phone
+     * @param phoneNumber
+     * @param role
+     * @return true
+     */
     private int validatePhone(String phoneNumber,String role){
         if(phoneNumber==null || phoneNumber.length()!=10){
             throw new IllegalArgumentException("Invalid phone number");
@@ -85,6 +112,10 @@ public class RegisterService {
         }
     }
 
+    /**
+     * for registration of admin, doctor, patient and receptionist
+     * @param registerRequest
+     */
     public void registerStaff(RegisterRequest registerRequest){
 
         if(registerRequest.getRole().equals("admin")){

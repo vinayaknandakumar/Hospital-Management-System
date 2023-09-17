@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegisterController {
     @Autowired
     private RegisterService registerService;
+
+    /**
+     * Controller for all registrations of doctor, patient, receptionist and admin
+     * @param registerRequest
+     * @return HttpResponse
+     */
     @PostMapping(value = "/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest){
         try {
