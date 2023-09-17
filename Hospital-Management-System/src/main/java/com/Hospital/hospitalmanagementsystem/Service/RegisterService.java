@@ -43,14 +43,17 @@ public class RegisterService {
         }
     }
 
-    private int validateEmail(String email){
+    private int validateEmail(String email,String role){
         if(email==null || email.trim().isEmpty()){
             throw new IllegalArgumentException("Email can't be empty");
         }
         else if(!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")){
             throw new IllegalArgumentException("Invalid email provided");
         }
-        else if(adminRepository.findByEmail(email)!=null){
+        else if(role.equals("admin") && adminRepository.findByEmail(email)!=null){
+            throw new NonUniqueResultException("Email already in use");
+        }
+        else if(role.equals("doctor") && doctorRepository.findByEmail(email)!=null){
             throw new NonUniqueResultException("Email already in use");
         }
         else {
@@ -67,9 +70,15 @@ public class RegisterService {
         }
     }
 
-    private int validatePhone(String phoneNumber){
+    private int validatePhone(String phoneNumber,String role){
         if(phoneNumber==null || phoneNumber.length()!=10){
             throw new IllegalArgumentException("Invalid phone number");
+        }
+        else if(role.equals("patient") && patientRepository.findByPhone(phoneNumber)!=null){
+            throw new NonUniqueResultException("Phone number already in use");
+        }
+        else if(role.equals("receptionist") && receptionistRepository.findByPhone(phoneNumber)!=null){
+            throw new NonUniqueResultException("Phone number already in use");
         }
         else {
             return 1;
@@ -86,7 +95,7 @@ public class RegisterService {
             if(validateLastName(registerRequest.getLastName())==1){
                 admin.setLastName(registerRequest.getLastName());
             }
-            if(validateEmail(registerRequest.getEmail())==1){
+            if(validateEmail(registerRequest.getEmail(),registerRequest.getRole())==1){
                 admin.setEmail(registerRequest.getEmail());
             }
             if (validatePassword(registerRequest.getPassword())==1){
@@ -102,7 +111,7 @@ public class RegisterService {
             if(validateLastName(registerRequest.getLastName())==1){
                 doctor.setLastName(registerRequest.getLastName());
             }
-            if(validateEmail(registerRequest.getEmail())==1){
+            if(validateEmail(registerRequest.getEmail(),registerRequest.getRole())==1){
                 doctor.setEmail(registerRequest.getEmail());
             }
             doctor.setGender(registerRequest.getGender());
@@ -123,7 +132,7 @@ public class RegisterService {
             }
             patient.setAge(registerRequest.getAge());
             patient.setGender(registerRequest.getGender());
-            if(validatePhone(registerRequest.getPhone())==1){
+            if(validatePhone(registerRequest.getPhone(), registerRequest.getRole())==1){
                 patient.setPhone(registerRequest.getPhone());
             }
             if(validatePassword(registerRequest.getPassword())==1){
@@ -134,14 +143,14 @@ public class RegisterService {
         }
         else if(registerRequest.getRole().equals("receptionist")){
             Receptionist receptionist = new Receptionist();
-            if(validateFirstName(receptionist.getFirstName())==1){
+            if(validateFirstName(registerRequest.getFirstName())==1){
                 receptionist.setFirstName(registerRequest.getFirstName());
             }
             if(validateLastName(registerRequest.getLastName())==1){
                 receptionist.setLastName(registerRequest.getLastName());
             }
             receptionist.setGender(registerRequest.getGender());
-            if(validatePhone(registerRequest.getPhone())==1){
+            if(validatePhone(registerRequest.getPhone(), registerRequest.getRole())==1){
                 receptionist.setPhone(registerRequest.getPhone());
             }
             if(validatePassword(registerRequest.getPassword())==1){

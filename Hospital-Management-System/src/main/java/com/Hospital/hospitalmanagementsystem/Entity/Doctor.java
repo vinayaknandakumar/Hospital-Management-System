@@ -1,6 +1,7 @@
 package com.Hospital.hospitalmanagementsystem.Entity;
 
 import jakarta.persistence.*;
+import jdk.jshell.EvalException;
 import lombok.*;
 
 @Entity
@@ -16,6 +17,8 @@ public class Doctor {
 
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String email;
     private String gender;
     private String specialization;
