@@ -12,9 +12,13 @@ import com.Hospital.hospitalmanagementsystem.Request.RegisterRequest;
 import jakarta.persistence.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Service
 public class RegisterService {
+
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private AdminRepository adminRepository;
@@ -24,6 +28,11 @@ public class RegisterService {
     private PatientRepository patientRepository;
     @Autowired
     private ReceptionistRepository receptionistRepository;
+
+//    @Autowired
+//    public RegisterService(BCryptPasswordEncoder bCryptPasswordEncoder){
+//        this.bCryptPasswordEncoder=bCryptPasswordEncoder;
+//    }
 
     /**
      * to validate firstName
@@ -91,6 +100,10 @@ public class RegisterService {
         }
     }
 
+//    private String hashPassword(String password){
+//        return bCryptPasswordEncoder.encode(password);
+//    }
+
     /**
      * to validate phone for 10 digits and uniqye phone
      * @param phoneNumber
@@ -130,7 +143,8 @@ public class RegisterService {
                 admin.setEmail(registerRequest.getEmail());
             }
             if (validatePassword(registerRequest.getPassword())==1){
-                admin.setPassword(registerRequest.getPassword());
+//                admin.setPassword(hashPassword(registerRequest.getPassword()));
+                admin.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
             }
             adminRepository.save(admin);
         }
@@ -149,7 +163,7 @@ public class RegisterService {
             doctor.setSpecialization(registerRequest.getSpecialization());
             doctor.setDoctorPresent(true);
             if(validatePassword(registerRequest.getPassword())==1){
-                doctor.setPassword(registerRequest.getPassword());
+                doctor.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
             }
             doctorRepository.save(doctor);
         }
@@ -167,7 +181,7 @@ public class RegisterService {
                 patient.setPhone(registerRequest.getPhone());
             }
             if(validatePassword(registerRequest.getPassword())==1){
-                patient.setPassword(registerRequest.getPassword());
+                patient.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
             }
             patient.setAddress(registerRequest.getAddress());
             patientRepository.save(patient);
@@ -185,7 +199,7 @@ public class RegisterService {
                 receptionist.setPhone(registerRequest.getPhone());
             }
             if(validatePassword(registerRequest.getPassword())==1){
-                receptionist.setPassword(registerRequest.getPassword());
+                receptionist.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
             }
             receptionistRepository.save(receptionist);
         }

@@ -1,4 +1,4 @@
-package com.Hospital.hospitalmanagementsystem.Response;
+package com.Hospital.hospitalmanagementsystem.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminResponse {
-    private String firstName;
-    private String lastName;
+public class AdminRequest {
     private String email;
-
-
+    private String password;
 }
