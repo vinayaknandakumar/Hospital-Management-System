@@ -20,6 +20,9 @@ public class Admin {
     @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
+    private String phone;
+
     //@Column(name = "password_hashed")
     private String password;
 }

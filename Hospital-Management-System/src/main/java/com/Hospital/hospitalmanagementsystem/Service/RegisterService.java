@@ -9,16 +9,14 @@ import com.Hospital.hospitalmanagementsystem.Repository.DoctorRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.PatientRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.ReceptionistRepository;
 import com.Hospital.hospitalmanagementsystem.Request.RegisterRequest;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Service
 public class RegisterService {
-
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private AdminRepository adminRepository;
@@ -29,183 +27,54 @@ public class RegisterService {
     @Autowired
     private ReceptionistRepository receptionistRepository;
 
-//    @Autowired
-//    public RegisterService(BCryptPasswordEncoder bCryptPasswordEncoder){
-//        this.bCryptPasswordEncoder=bCryptPasswordEncoder;
-//    }
-
-    /**
-     * to validate firstName
-     * @param firstName
-     * @return true
-     */
-    private int validateFirstName(String firstName){
-        if(firstName==null || firstName.trim().isEmpty()){
-            throw new IllegalArgumentException("First Name can't be empty");
-        }
-        else {
-            return 1;
-        }
-    }
-
-    /**
-     * to validate lastname
-     * @param lastName
-     * @return true
-     */
-    private int validateLastName(String lastName){
-        if(lastName==null||lastName.trim().isEmpty()){
-            throw new IllegalArgumentException("Last name can't be empty");
-        }
-        else {
-            return 1;
-        }
-    }
-
-    /**
-     * to validate email for null and @ and unique email
-     * @param email
-     * @param role
-     * @return true
-     */
-    private int validateEmail(String email,String role){
-        if(email==null || email.trim().isEmpty()){
-            throw new IllegalArgumentException("Email can't be empty");
-        }
-        else if(!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")){
-            throw new IllegalArgumentException("Invalid email provided");
-        }
-        else if(role.equals("admin") && adminRepository.findByEmail(email)!=null){
-            throw new NonUniqueResultException("Email already in use");
-        }
-        else if(role.equals("doctor") && doctorRepository.findByEmail(email)!=null){
-            throw new NonUniqueResultException("Email already in use");
-        }
-        else {
-            return 1;
-        }
-    }
-
-    /**
-     * to validate password not <3 and >8
-     * @param password
-     * @return true
-     */
-    private int validatePassword(String password){
-        if(password.length()<4 || password.length()>8){
-            throw new IllegalArgumentException("Password must contain more than 3 characters and less than 8 characters");
-        }
-        else {
-            return 1;
-        }
-    }
-
-//    private String hashPassword(String password){
-//        return bCryptPasswordEncoder.encode(password);
-//    }
-
-    /**
-     * to validate phone for 10 digits and uniqye phone
-     * @param phoneNumber
-     * @param role
-     * @return true
-     */
-    private int validatePhone(String phoneNumber,String role){
-        if(phoneNumber==null || phoneNumber.length()!=10){
-            throw new IllegalArgumentException("Invalid phone number");
-        }
-        else if(role.equals("patient") && patientRepository.findByPhone(phoneNumber)!=null){
-            throw new NonUniqueResultException("Phone number already in use");
-        }
-        else if(role.equals("receptionist") && receptionistRepository.findByPhone(phoneNumber)!=null){
-            throw new NonUniqueResultException("Phone number already in use");
-        }
-        else {
-            return 1;
-        }
-    }
 
     /**
      * for registration of admin, doctor, patient and receptionist
      * @param registerRequest
      */
-    public void registerStaff(RegisterRequest registerRequest){
+    public void registerStaff(RegisterRequest registerRequest) {
 
-        if(registerRequest.getRole().equals("admin")){
+        if (registerRequest.getRole().equalsIgnoreCase("admin")) {
             Admin admin = new Admin();
-            if (validateFirstName(registerRequest.getFirstName())==1){
-                admin.setFirstName(registerRequest.getFirstName());
-            }
-            if(validateLastName(registerRequest.getLastName())==1){
-                admin.setLastName(registerRequest.getLastName());
-            }
-            if(validateEmail(registerRequest.getEmail(),registerRequest.getRole())==1){
-                admin.setEmail(registerRequest.getEmail());
-            }
-            if (validatePassword(registerRequest.getPassword())==1){
-//                admin.setPassword(hashPassword(registerRequest.getPassword()));
-                admin.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
-            }
+            admin.setFirstName(registerRequest.getFirstName());
+            admin.setLastName(registerRequest.getLastName());
+            admin.setEmail(registerRequest.getEmail());
+            admin.setPhone(registerRequest.getPhone());
+            admin.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             adminRepository.save(admin);
-        }
-        else if (registerRequest.getRole().equals("doctor")){
+        } else if (registerRequest.getRole().equals("doctor")) {
             Doctor doctor = new Doctor();
-            if(validateFirstName(registerRequest.getFirstName())==1){
-                doctor.setFirstName(registerRequest.getFirstName());
-            }
-            if(validateLastName(registerRequest.getLastName())==1){
-                doctor.setLastName(registerRequest.getLastName());
-            }
-            if(validateEmail(registerRequest.getEmail(),registerRequest.getRole())==1){
-                doctor.setEmail(registerRequest.getEmail());
-            }
+            doctor.setFirstName(registerRequest.getFirstName());
+            doctor.setLastName(registerRequest.getLastName());
+            doctor.setEmail(registerRequest.getEmail());
+            doctor.setPhone(registerRequest.getPhone());
             doctor.setGender(registerRequest.getGender());
             doctor.setSpecialization(registerRequest.getSpecialization());
             doctor.setDoctorPresent(true);
-            if(validatePassword(registerRequest.getPassword())==1){
-                doctor.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
-            }
+            doctor.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             doctorRepository.save(doctor);
-        }
-        else if (registerRequest.getRole().equals("patient")){
+        } else if (registerRequest.getRole().equals("patient")) {
             Patient patient = new Patient();
-            if(validateFirstName(registerRequest.getFirstName())==1){
-                patient.setFirstName(registerRequest.getFirstName());
-            }
-            if(validateLastName(registerRequest.getLastName())==1){
-                patient.setLastName(registerRequest.getLastName());
-            }
+            patient.setFirstName(registerRequest.getFirstName());
+            patient.setLastName(registerRequest.getLastName());
             patient.setAge(registerRequest.getAge());
             patient.setGender(registerRequest.getGender());
-            if(validatePhone(registerRequest.getPhone(), registerRequest.getRole())==1){
-                patient.setPhone(registerRequest.getPhone());
-            }
-            if(validatePassword(registerRequest.getPassword())==1){
-                patient.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
-            }
+            patient.setPhone(registerRequest.getPhone());
+            patient.setEmail(registerRequest.getEmail());
+            patient.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             patient.setAddress(registerRequest.getAddress());
             patientRepository.save(patient);
-        }
-        else if(registerRequest.getRole().equals("receptionist")){
+        } else if (registerRequest.getRole().equals("receptionist")) {
             Receptionist receptionist = new Receptionist();
-            if(validateFirstName(registerRequest.getFirstName())==1){
-                receptionist.setFirstName(registerRequest.getFirstName());
-            }
-            if(validateLastName(registerRequest.getLastName())==1){
-                receptionist.setLastName(registerRequest.getLastName());
-            }
+            receptionist.setFirstName(registerRequest.getFirstName());
+            receptionist.setLastName(registerRequest.getLastName());
             receptionist.setGender(registerRequest.getGender());
-            if(validatePhone(registerRequest.getPhone(), registerRequest.getRole())==1){
-                receptionist.setPhone(registerRequest.getPhone());
-            }
-            if(validatePassword(registerRequest.getPassword())==1){
-                receptionist.setPassword(BCrypt.hashpw(registerRequest.getPassword(),BCrypt.gensalt()));
-            }
+            receptionist.setPhone(registerRequest.getPhone());
+            receptionist.setEmail(registerRequest.getEmail());
+            receptionist.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             receptionistRepository.save(receptionist);
         }
-        else {
-            throw new IllegalArgumentException("Invalid Role : "+ registerRequest.getRole());
-        }
+
     }
 
 }

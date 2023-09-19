@@ -20,6 +20,7 @@ public class Doctor {
 
     @Column(unique = true)
     private String email;
+    private String phone;
     private String gender;
     private String specialization;
     private boolean doctorPresent;
