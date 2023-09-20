@@ -2,8 +2,10 @@ package com.Hospital.hospitalmanagementsystem.Service;
 
 import com.Hospital.hospitalmanagementsystem.Controller.RegisterController;
 import com.Hospital.hospitalmanagementsystem.Entity.Admin;
+import com.Hospital.hospitalmanagementsystem.Entity.Doctor;
 import com.Hospital.hospitalmanagementsystem.Exception.ValidationException;
 import com.Hospital.hospitalmanagementsystem.Repository.AdminRepository;
+import com.Hospital.hospitalmanagementsystem.Repository.DoctorRepository;
 import com.Hospital.hospitalmanagementsystem.Request.AdminRequest;
 import com.Hospital.hospitalmanagementsystem.Request.RegisterRequest;
 import com.Hospital.hospitalmanagementsystem.Response.AdminResponse;
@@ -16,6 +18,8 @@ public class AdminService {
 
    @Autowired
    private AdminRepository adminRepository;
+   @Autowired
+   private DoctorRepository doctorRepository;
 
     public AdminResponse adminLogin(AdminRequest adminRequest) {
         Admin admin;
@@ -28,14 +32,21 @@ public class AdminService {
                 adminResponse.setEmail(admin.getEmail());
                 return adminResponse;
             }
-            else {
-                throw new ValidationException("Wrong password");
-            }
+            throw new ValidationException("Wrong password");
+        }
+        throw new ValidationException("User not registered");
+    }
 
+    public void removeDoctor(String email){
+        Doctor doctor = doctorRepository.findByEmail(email);
+        if (doctor != null){
+            doctor.setDoctorPresent(false);
+            doctorRepository.save(doctor);
         }
         else {
-            throw new ValidationException("User not registered");
+            throw new ValidationException("No doctor with the specified email");
         }
+
     }
 
 

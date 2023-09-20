@@ -1,10 +1,13 @@
 package com.Hospital.hospitalmanagementsystem.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
-import java.util.Date;
+import java.sql.Date;
+
 
 @Entity
 @Table(name = "Appointment")
@@ -18,15 +21,15 @@ public class Appointment {
     private int appointmentId;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_email")
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_email")
     private Doctor doctor;
 
     private Date appointmentDate;
-    private LocalTime appointmentTime;
+    private int appointmentSlots;
     private boolean doctorFreeStatus;
     private boolean treatmentStatus;
 }
