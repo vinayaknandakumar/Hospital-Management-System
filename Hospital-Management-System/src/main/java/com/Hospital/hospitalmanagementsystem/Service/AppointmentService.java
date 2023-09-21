@@ -3,6 +3,7 @@ package com.Hospital.hospitalmanagementsystem.Service;
 import com.Hospital.hospitalmanagementsystem.Entity.Appointment;
 import com.Hospital.hospitalmanagementsystem.Entity.Doctor;
 import com.Hospital.hospitalmanagementsystem.Entity.Patient;
+import com.Hospital.hospitalmanagementsystem.Exception.ValidationException;
 import com.Hospital.hospitalmanagementsystem.Repository.AppointmentRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.DoctorRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.PatientRepository;
@@ -10,6 +11,7 @@ import com.Hospital.hospitalmanagementsystem.Request.AppointmentRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -27,19 +29,25 @@ public class AppointmentService {
 
     public void addAppointment(AppointmentRequest appointmentRequest) throws ParseException {
         List<Doctor> doctorList = doctorRepository.findByDoctorPresent(true);//doctors still working in the hospital
-        String email = appointmentRequest.getDoctor().getEmail();
         Doctor selectedDoctor = doctorList
                 .stream()
-                .filter(doctor -> email.equals(doctor.getEmail()))
+                .filter(doctor -> appointmentRequest.getDoctorEmail().equals(doctor.getEmail()))
                 .findFirst()
                 .orElse(null);
 
         if (selectedDoctor != null) {
-            String patientEmail = appointmentRequest.getPatient().getEmail();
-            Patient patient = patientRepository.findByEmail(patientEmail);
+            Patient patient = patientRepository.findByEmail(appointmentRequest.getPatientEmail());
             if (patient == null) {
-                throw new EntityNotFoundException("Patient not found");
+                throw new EntityNotFoundException("Patient not found. Please Register");
             }
+
+            if (appointmentRepository.findAll().
+                    stream().
+                    anyMatch(appointment ->
+                            appointment.getDoctor().getDoctorId() == selectedDoctor.getDoctorId() && appointment.getPatient().getPatientId() == patient.getPatientId())) {
+                throw new ValidationException("Appointment already scheduled");
+            }
+
             Appointment appointment = new Appointment();
             appointment.setDoctor(selectedDoctor);
             appointment.setPatient(patient);

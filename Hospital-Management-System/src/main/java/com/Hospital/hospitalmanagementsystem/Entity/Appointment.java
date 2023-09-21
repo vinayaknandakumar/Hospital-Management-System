@@ -21,11 +21,11 @@ public class Appointment {
     private int appointmentId;
 
     @ManyToOne
-    @JoinColumn(name = "patient_email")
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_email")
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
     private Date appointmentDate;
