@@ -3,8 +3,8 @@ package com.Hospital.hospitalmanagementsystem.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +25,10 @@ public class Prescription {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    @OneToOne
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
 
     @ManyToMany
     @JoinTable(name = "prescription_medicines",

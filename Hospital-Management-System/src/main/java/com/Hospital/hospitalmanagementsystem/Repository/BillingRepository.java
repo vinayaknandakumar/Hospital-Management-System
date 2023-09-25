@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BillingRepository extends JpaRepository<Billing,Integer> {
+    boolean existsByPrescription_PrescriptionId(int prescriptionId);
 }

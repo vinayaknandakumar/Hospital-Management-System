@@ -16,8 +16,8 @@ public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int medicineId;
-
+    @Column(unique = true)
     private String medicineName;
-    private double price;
+    private Double price;
 }
 

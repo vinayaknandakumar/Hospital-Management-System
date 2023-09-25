@@ -23,23 +23,28 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ParseException.class)
-    public ResponseEntity<String> handleValidationException(ParseException ex) {
+    public ResponseEntity<String> handleParseException(ParseException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(OneToOneException.class)
+    public ResponseEntity<String> handleOnetoOneException(OneToOneException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleValidationException(EntityNotFoundException ex) {
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleValidationException(DataIntegrityViolationException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or phone already in use");
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Already registered");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
