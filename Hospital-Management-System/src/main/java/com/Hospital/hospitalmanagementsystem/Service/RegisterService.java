@@ -9,9 +9,10 @@ import com.Hospital.hospitalmanagementsystem.Repository.DoctorRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.PatientRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.ReceptionistRepository;
 import com.Hospital.hospitalmanagementsystem.Request.RegisterRequest;
-import io.micrometer.common.util.StringUtils;
-import jakarta.persistence.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -26,6 +27,20 @@ public class RegisterService {
     private PatientRepository patientRepository;
     @Autowired
     private ReceptionistRepository receptionistRepository;
+    @Autowired
+    private JavaMailSender mailSender;
+
+
+    private static final String RECEPTIONISTNAME="receptionist";
+    private static final String ADMINNAME="admin";
+    private static final String DOCTORNAME="doctor";
+    private static final String PATIENTNAME="patient";
+
+    @Value("${email.subject}")
+    private String subject;
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
 
 
     /**
@@ -34,7 +49,7 @@ public class RegisterService {
      */
     public void registerStaff(RegisterRequest registerRequest) {
 
-        if (registerRequest.getRole().equalsIgnoreCase("admin")) {
+        if (registerRequest.getRole().equalsIgnoreCase(RegisterService.ADMINNAME)) {
             Admin admin = new Admin();
             admin.setFirstName(registerRequest.getFirstName());
             admin.setLastName(registerRequest.getLastName());
@@ -42,7 +57,7 @@ public class RegisterService {
             admin.setPhone(registerRequest.getPhone());
             admin.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             adminRepository.save(admin);
-        } else if (registerRequest.getRole().equals("doctor")) {
+        } else if (registerRequest.getRole().equalsIgnoreCase(RegisterService.DOCTORNAME)) {
             Doctor doctor = new Doctor();
             doctor.setFirstName(registerRequest.getFirstName());
             doctor.setLastName(registerRequest.getLastName());
@@ -53,7 +68,7 @@ public class RegisterService {
             doctor.setDoctorPresent(true);
             doctor.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             doctorRepository.save(doctor);
-        } else if (registerRequest.getRole().equals("patient")) {
+        } else if (registerRequest.getRole().equalsIgnoreCase(RegisterService.PATIENTNAME)) {
             Patient patient = new Patient();
             patient.setFirstName(registerRequest.getFirstName());
             patient.setLastName(registerRequest.getLastName());
@@ -64,7 +79,7 @@ public class RegisterService {
             patient.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             patient.setAddress(registerRequest.getAddress());
             patientRepository.save(patient);
-        } else if (registerRequest.getRole().equals("receptionist")) {
+        } else if (registerRequest.getRole().equalsIgnoreCase(RegisterService.RECEPTIONISTNAME)) {
             Receptionist receptionist = new Receptionist();
             receptionist.setFirstName(registerRequest.getFirstName());
             receptionist.setLastName(registerRequest.getLastName());
@@ -74,6 +89,13 @@ public class RegisterService {
             receptionist.setPassword(BCrypt.hashpw(registerRequest.getPassword(), BCrypt.gensalt()));
             receptionistRepository.save(receptionist);
         }
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(senderEmail);
+        message.setTo(registerRequest.getEmail());
+        message.setSubject(subject);
+        message.setText("Welcome "+registerRequest.getFirstName()+" "+registerRequest.getLastName()+". Thank you for registering with UnitedHealthCare. We care about you");
+        mailSender.send(message);
+
 
     }
 

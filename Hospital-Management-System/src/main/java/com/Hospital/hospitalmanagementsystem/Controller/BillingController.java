@@ -19,7 +19,7 @@ public class BillingController {
 
     @PostMapping(value = "generate/bill")
     public ResponseEntity<String> generateBill(@RequestBody @Valid BillingRequest billingRequest){
-        billingService.generateBill(billingRequest);
-        return ResponseEntity.ok("Bill generated");
+        Double amount = billingService.generateBill(billingRequest);
+        return ResponseEntity.ok("Bill generated. Amount to be paid: Rs "+amount);
     }
 }

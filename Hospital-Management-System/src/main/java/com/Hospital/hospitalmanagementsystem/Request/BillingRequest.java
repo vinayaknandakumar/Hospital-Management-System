@@ -1,6 +1,8 @@
 package com.Hospital.hospitalmanagementsystem.Request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +22,6 @@ public class BillingRequest {
     private String receptionistEmail;
     @NotNull(message = "Prescription id cannot be null")
     private int prescriptionId;
+    @Min(value = 0, message = "Amount cannot be negative")
     private Double doctorAmount;
 }

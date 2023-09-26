@@ -36,5 +36,6 @@ public class Billing {
     private Double medicineAmount;
     private Double doctorAmount;
     private Double totalAmount;
+    private boolean paymentStatus;
 }
 

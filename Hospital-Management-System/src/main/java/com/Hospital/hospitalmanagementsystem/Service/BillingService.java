@@ -25,7 +25,7 @@ public class BillingService {
     @Autowired
     private BillingRepository billingRepository;
 
-    public void generateBill(BillingRequest billingRequest) {
+    public Double generateBill(BillingRequest billingRequest) {
 
         Doctor doctor = doctorRepository.findByEmail(billingRequest.getDoctorEmail());
         Patient patient = patientRepository.findByEmail(billingRequest.getPatientEmail());
@@ -59,7 +59,9 @@ public class BillingService {
             billing.setDoctorAmount(billingRequest.getDoctorAmount());
             billing.setTotalAmount(totalAmount);
             billing.setBillingDate(prescription.getPrescriptionDate());
+            billing.setPaymentStatus(false);
             billingRepository.save(billing);
+            return totalAmount;
 
         } else {
             throw new EntityNotFoundException("Unable to create billing. Invalid email or prescriptionId.");

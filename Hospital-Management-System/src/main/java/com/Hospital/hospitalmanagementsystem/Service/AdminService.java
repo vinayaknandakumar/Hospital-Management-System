@@ -18,6 +18,7 @@ import com.Hospital.hospitalmanagementsystem.Response.PatientResponse;
 import com.Hospital.hospitalmanagementsystem.Response.ReceptionistResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class AdminService {
    private PatientRepository patientRepository;
    @Autowired
    private ReceptionistRepository receptionistRepository;
+
 
     public AdminResponse adminLogin(AdminRequest adminRequest) {
         Admin admin;
