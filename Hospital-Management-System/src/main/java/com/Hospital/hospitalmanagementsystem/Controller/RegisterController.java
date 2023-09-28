@@ -15,8 +15,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @Validated
@@ -46,5 +50,11 @@ public class RegisterController {
     ) {
         registerService.registerStaff(registerRequest);
         return ResponseEntity.ok("Registration Successful");
+    }
+
+    @PostMapping("/upload/excel")
+    public ResponseEntity<String> uploadPatients(@RequestParam("file") MultipartFile file) throws IOException{
+        registerService.registerPatientFromExcel(file);
+        return ResponseEntity.ok("All patients added. ");
     }
 }
