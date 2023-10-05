@@ -23,6 +23,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(LocationInvalidException.class)
+    public ResponseEntity<String> handleLocationInvalidException(LocationInvalidException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handleIOException(IOException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Issue with the excel sheet");

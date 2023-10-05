@@ -2,14 +2,11 @@ package com.Hospital.hospitalmanagementsystem.Service;
 
 import com.Hospital.hospitalmanagementsystem.Entity.*;
 import com.Hospital.hospitalmanagementsystem.Exception.OneToOneException;
-import com.Hospital.hospitalmanagementsystem.Exception.ValidationException;
 import com.Hospital.hospitalmanagementsystem.Repository.*;
 import com.Hospital.hospitalmanagementsystem.Request.BillingRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class BillingService {

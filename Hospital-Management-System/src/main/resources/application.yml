@@ -1,0 +1,4 @@
+health:
+  baseurl: https://health.gov/myhealthfinder/api/v3
+codec:
+  size: 1048576

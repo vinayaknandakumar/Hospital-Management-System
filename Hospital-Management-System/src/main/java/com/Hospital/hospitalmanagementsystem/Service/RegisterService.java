@@ -50,7 +50,6 @@ public class RegisterService {
     @Value("${spring.mail.username}")
     private String senderEmail;
 
-
     /**
      * for registration of admin, doctor, patient and receptionist
      * @param registerRequest

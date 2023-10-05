@@ -19,5 +19,8 @@ public class Medicine {
     @Column(unique = true)
     private String medicineName;
     private Double price;
+
+    public Medicine(String medicine1, double v) {
+    }
 }
 

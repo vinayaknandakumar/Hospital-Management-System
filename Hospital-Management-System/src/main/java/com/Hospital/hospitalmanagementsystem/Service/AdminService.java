@@ -1,6 +1,5 @@
 package com.Hospital.hospitalmanagementsystem.Service;
 
-import com.Hospital.hospitalmanagementsystem.Controller.RegisterController;
 import com.Hospital.hospitalmanagementsystem.Entity.Admin;
 import com.Hospital.hospitalmanagementsystem.Entity.Doctor;
 import com.Hospital.hospitalmanagementsystem.Entity.Patient;
@@ -11,14 +10,12 @@ import com.Hospital.hospitalmanagementsystem.Repository.DoctorRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.PatientRepository;
 import com.Hospital.hospitalmanagementsystem.Repository.ReceptionistRepository;
 import com.Hospital.hospitalmanagementsystem.Request.AdminRequest;
-import com.Hospital.hospitalmanagementsystem.Request.RegisterRequest;
 import com.Hospital.hospitalmanagementsystem.Response.AdminResponse;
 import com.Hospital.hospitalmanagementsystem.Response.DoctorResponse;
 import com.Hospital.hospitalmanagementsystem.Response.PatientResponse;
 import com.Hospital.hospitalmanagementsystem.Response.ReceptionistResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -103,7 +100,4 @@ public class AdminService {
         }
         return receptionistResponses;
     }
-
-
-
 }
