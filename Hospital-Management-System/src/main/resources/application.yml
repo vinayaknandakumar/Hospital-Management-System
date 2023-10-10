@@ -1,4 +1,9 @@
 health:
   baseurl: https://health.gov/myhealthfinder/api/v3
+
 codec:
   size: 1048576
+
+covid:
+  url: https://api.rootnet.in/covid19-in/stats/latest
+  contact-url: https://api.rootnet.in/covid19-in/contacts

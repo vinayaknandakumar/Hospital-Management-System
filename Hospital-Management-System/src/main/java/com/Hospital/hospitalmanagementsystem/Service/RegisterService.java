@@ -103,7 +103,6 @@ public class RegisterService {
         message.setText("Welcome "+registerRequest.getFirstName()+" "+registerRequest.getLastName()+". Thank you for registering with UnitedHealthCare. We care about you");
         mailSender.send(message);
 
-
     }
 
     public void registerPatientFromExcel(MultipartFile file) throws IOException {
@@ -120,8 +119,8 @@ public class RegisterService {
                 patient.setAge(String.valueOf((int)row.getCell(2).getNumericCellValue()));
                 patient.setGender(row.getCell(3).getStringCellValue());
                 patient.setPhone(String.valueOf((long)row.getCell(4).getNumericCellValue()));
-                patient.setAddress(row.getCell(5).getStringCellValue());
-                patient.setEmail(row.getCell(6).getStringCellValue());
+                patient.setAddress(row.getCell(6).getStringCellValue());
+                patient.setEmail(row.getCell(5).getStringCellValue());
                 patient.setPassword(BCrypt.hashpw("unitedhealthcare", BCrypt.gensalt()));
                 patientRepository.save(patient);
             }

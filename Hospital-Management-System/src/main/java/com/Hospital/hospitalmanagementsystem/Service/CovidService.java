@@ -3,26 +3,24 @@ package com.Hospital.hospitalmanagementsystem.Service;
 import com.Hospital.hospitalmanagementsystem.Exception.LocationInvalidException;
 import com.Hospital.hospitalmanagementsystem.Response.CovidContact;
 import com.Hospital.hospitalmanagementsystem.Response.CovidData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-
 @Service
 public class CovidService {
 
-    //private final WebClient webClient;
+    @Value("${covid.url}")
+    private String url;
 
-//    public CovidService() {
-//        this.webClient = WebClient.builder()
-//                .baseUrl("https://api.rootnet.in/covid19-in/stats/latest")
-//                .build();
-//    }
+    @Value("${covid.contact-url}")
+    private String contact;
 
     public Mono<CovidData.Data.RegionalData> fetchCovidDataByLocation(String loc) {
         return WebClient
                 .builder()
-                .baseUrl("https://api.rootnet.in/covid19-in/stats/latest")
+                .baseUrl(url)
                 .build()
                 .get()
                 .retrieve()
@@ -41,7 +39,7 @@ public class CovidService {
     public Mono<CovidContact.Data.Contacts.Regional> fetchCovidContactHelpline(String loc){
         return WebClient
                 .builder()
-                .baseUrl("https://api.rootnet.in/covid19-in/contacts")
+                .baseUrl(contact)
                 .build()
                 .get()
                 .retrieve()
@@ -59,3 +57,22 @@ public class CovidService {
 
 }
 
+
+
+
+
+
+
+
+
+//    @Autowired
+//    Environment env;
+//    String pageTitle = env.getProperty("health.baseurl");
+
+//private final WebClient webClient;
+
+//    public CovidService() {
+//        this.webClient = WebClient.builder()
+//                .baseUrl("https://api.rootnet.in/covid19-in/stats/latest")
+//                .build();
+//    }
